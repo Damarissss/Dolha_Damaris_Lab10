@@ -33,11 +33,11 @@ namespace gRPCClient.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> Unary()
+        public async Task<IActionResult> Unary(int nr)
         {
             var channel = GrpcChannel.ForAddress("https://localhost:7006");
             var client = new Greeter.GreeterClient(channel);
-            var reply = await client.SendStatusAsync(new SRequest { No = 3 });
+            var reply = await client.SendStatusAsync(new SRequest { No = nr });
             return View("ShowStatus", (object)ChangetoDictionary(reply));
         }
 
@@ -79,7 +79,7 @@ namespace gRPCClient.Controllers
             var client = new Greeter.GreeterClient(channel);
             Dictionary<string, string> statusDict = new Dictionary<string, string>();
             int[] statuses = { 3, 2, 4 };
-            using (var call = client.SendStatusCS())
+                using (var call = client.SendStatusCS())
             {
                 foreach (var sT in statuses)
                 {
